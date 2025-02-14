@@ -16,13 +16,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen">
-        <SidebarProvider>
-          <AppSidebar />
-          {/* <main> */}
-          {/* <SidebarTrigger /> */}
-          {children}
-          {/* </main> */}
-        </SidebarProvider>
+        {/* <SidebarProvider>
+          <AppSidebar /> */}
+        {/* <main> */}
+        {/* <SidebarTrigger /> */}
+        {children}
+        {/* </main> */}
+        {/* </SidebarProvider> */}
       </body>
     </html>
   );
