@@ -1,38 +1,42 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { 
+  TableRow
+} from '@/components/ui/table';
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { 
-  Calendar as CalendarIcon, 
+  SelectValue
+} from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import {
+  Calendar as CalendarIcon,
   Download,
   ChevronLeft,
   ChevronRight,
   Search,
   FileText,
   Loader2
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { fetchWorkOrders, type WorkOrder } from "@/lib/api";
+} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { fetchWorkOrders, type WorkOrder } from '@/lib/api';
 
 export function WorkOrderList() {
   const [startDate, setStartDate] = useState<Date>();
@@ -51,7 +55,7 @@ export function WorkOrderList() {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const response = await fetchWorkOrders(
         currentPage,
         pageSize,
@@ -94,39 +98,58 @@ export function WorkOrderList() {
       <div className="bg-green-700 p-6">
         <div className="flex items-center gap-2 mb-6">
           <FileText className="h-5 w-5 text-white" />
-          <h1 className="text-white text-xl font-semibold">Work Order Report</h1>
+          <h1 className="text-white text-xl font-semibold">
+            Work Order Report
+          </h1>
         </div>
 
         <Card>
           <CardContent className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-600">Branch</label>
-                <Select value={selectedBranch} onValueChange={setSelectedBranch}>
+                <label className="text-sm font-medium text-gray-600">
+                  Branch
+                </label>
+                <Select
+                  value={selectedBranch}
+                  onValueChange={setSelectedBranch}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select Branch" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="SERUI GENERAL REPAIR">SERUI GENERAL REPAIR</SelectItem>
-                    <SelectItem value="JAKARTA SERVICE CENTER">JAKARTA SERVICE CENTER</SelectItem>
-                    <SelectItem value="BANDUNG WORKSHOP">BANDUNG WORKSHOP</SelectItem>
+                    <SelectItem value="SERUI GENERAL REPAIR">
+                      SERUI GENERAL REPAIR
+                    </SelectItem>
+                    <SelectItem value="JAKARTA SERVICE CENTER">
+                      JAKARTA SERVICE CENTER
+                    </SelectItem>
+                    <SelectItem value="BANDUNG WORKSHOP">
+                      BANDUNG WORKSHOP
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-600">Start Date</label>
+                <label className="text-sm font-medium text-gray-600">
+                  Start Date
+                </label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
-                      variant={"outline"}
+                      variant={'outline'}
                       className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !startDate && "text-muted-foreground"
+                        'w-full justify-start text-left font-normal',
+                        !startDate && 'text-muted-foreground'
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {startDate ? format(startDate, "MM/dd/yyyy") : <span>Select date</span>}
+                      {startDate ? (
+                        format(startDate, 'MM/dd/yyyy')
+                      ) : (
+                        <span>Select date</span>
+                      )}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -141,18 +164,24 @@ export function WorkOrderList() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-600">End Date</label>
+                <label className="text-sm font-medium text-gray-600">
+                  End Date
+                </label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
-                      variant={"outline"}
+                      variant={'outline'}
                       className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !endDate && "text-muted-foreground"
+                        'w-full justify-start text-left font-normal',
+                        !endDate && 'text-muted-foreground'
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {endDate ? format(endDate, "MM/dd/yyyy") : <span>Select date</span>}
+                      {endDate ? (
+                        format(endDate, 'MM/dd/yyyy')
+                      ) : (
+                        <span>Select date</span>
+                      )}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -167,7 +196,9 @@ export function WorkOrderList() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-600">Transaction Type</label>
+                <label className="text-sm font-medium text-gray-600">
+                  Transaction Type
+                </label>
                 <Select>
                   <SelectTrigger>
                     <SelectValue placeholder="Invoice Date" />
@@ -180,7 +211,7 @@ export function WorkOrderList() {
               </div>
 
               <div className="flex items-end">
-                <Button 
+                <Button
                   className="w-full bg-orange-500 hover:bg-orange-600"
                   onClick={handleSearch}
                   disabled={isLoading}
@@ -205,7 +236,10 @@ export function WorkOrderList() {
             <div className="flex justify-between items-center mb-6">
               <div className="flex items-center gap-4">
                 <span className="text-sm text-gray-600">Display</span>
-                <Select value={pageSize.toString()} onValueChange={handlePageSizeChange}>
+                <Select
+                  value={pageSize.toString()}
+                  onValueChange={handlePageSizeChange}
+                >
                   <SelectTrigger className="w-[70px]">
                     <SelectValue placeholder={pageSize.toString()} />
                   </SelectTrigger>
@@ -217,7 +251,10 @@ export function WorkOrderList() {
                   </SelectContent>
                 </Select>
               </div>
-              <Button variant="outline" className="text-green-700 border-green-700">
+              <Button
+                variant="outline"
+                className="text-green-700 border-green-700"
+              >
                 <Download className="mr-2 h-4 w-4" />
                 Report Work Order Download here
               </Button>
@@ -227,12 +264,22 @@ export function WorkOrderList() {
               <div className="rounded-md bg-red-50 p-4 mb-4">
                 <div className="flex">
                   <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    <svg
+                      className="h-5 w-5 text-red-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <h3 className="text-sm font-medium text-red-800">{error}</h3>
+                    <h3 className="text-sm font-medium text-red-800">
+                      {error}
+                    </h3>
                   </div>
                 </div>
               </div>
@@ -281,13 +328,21 @@ export function WorkOrderList() {
                         <TableCell>{order.invoiceDate}</TableCell>
                         <TableCell>{order.vehicleUnit}</TableCell>
                         <TableCell>
-                          <Badge 
-                            variant={order.status === 'Invoice' ? 'default' : 'secondary'}
+                          <Badge
+                            variant={
+                              order.status === 'Invoice'
+                                ? 'default'
+                                : 'secondary'
+                            }
                             className={cn(
-                              order.status === 'Invoice' && 'bg-green-100 text-green-800 hover:bg-green-100',
-                              order.status === 'Settlement' && 'bg-blue-100 text-blue-800 hover:bg-blue-100',
-                              order.status === 'In Progress' && 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100',
-                              order.status === 'Pending' && 'bg-gray-100 text-gray-800 hover:bg-gray-100'
+                              order.status === 'Invoice' &&
+                                'bg-green-100 text-green-800 hover:bg-green-100',
+                              order.status === 'Settlement' &&
+                                'bg-blue-100 text-blue-800 hover:bg-blue-100',
+                              order.status === 'In Progress' &&
+                                'bg-yellow-100 text-yellow-800 hover:bg-yellow-100',
+                              order.status === 'Pending' &&
+                                'bg-gray-100 text-gray-800 hover:bg-gray-100'
                             )}
                           >
                             {order.status}
@@ -310,7 +365,8 @@ export function WorkOrderList() {
             <div className="flex items-center justify-between mt-4">
               <div className="text-sm text-gray-600">
                 Showing {(currentPage - 1) * pageSize + 1} to{' '}
-                {Math.min(currentPage * pageSize, totalItems)} of {totalItems} entries
+                {Math.min(currentPage * pageSize, totalItems)} of {totalItems}{' '}
+                entries
               </div>
               <div className="flex items-center gap-2">
                 <Button
@@ -329,7 +385,7 @@ export function WorkOrderList() {
                       variant="outline"
                       size="sm"
                       className={cn(
-                        pageNum === currentPage && "bg-green-700 text-white"
+                        pageNum === currentPage && 'bg-green-700 text-white'
                       )}
                       onClick={() => handlePageChange(pageNum)}
                       disabled={isLoading}

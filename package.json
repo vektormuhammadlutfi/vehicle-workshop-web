@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "generate-data": "node scripts/generate-data.js",
-    "server": "json-server --watch data/db.json --port 3002"
+    "json-server": "json-server --watch data/db.json --port 3002"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
