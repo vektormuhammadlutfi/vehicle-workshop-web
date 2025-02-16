@@ -5,7 +5,6 @@ import { CustomersResponse, Customer } from '../types/CustomerTypes';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,

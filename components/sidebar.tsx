@@ -7,24 +7,19 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import {
-  Menu,
   Truck,
   LayoutDashboard,
   FileText,
   ClipboardList,
   FileOutput,
-  FileInput,
   Clock,
   Tag,
   ShoppingCart,
   Package,
-  Receipt,
   CreditCard,
-  DollarSign,
   Box,
   Car,
   Wallet,
-  ChevronRight,
   ChevronDown
 } from 'lucide-react';
 
@@ -34,6 +29,83 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   mobileOpen?: boolean;
   onMobileClose?: () => void;
 }
+
+interface NavItemProps {
+  icon: React.ElementType;
+  title: string;
+  collapsed?: boolean;
+  active?: boolean;
+}
+
+interface MenuSectionProps {
+  title: string;
+  menuId: string;
+  items: NavItemProps[];
+  expandedMenus: string[];
+  toggleMenu: (menuId: string) => void;
+  isOpen: boolean;
+}
+
+const NavItem = ({ icon: Icon, title, collapsed, active }: NavItemProps) => (
+  <Button
+    variant="ghost"
+    className={cn(
+      'w-full justify-start',
+      active && 'bg-gray-100 text-green-700',
+      collapsed ? 'px-2' : 'px-4'
+    )}
+  >
+    <Icon
+      className={cn(
+        'h-4 w-4',
+        active && 'text-green-700',
+        collapsed ? 'mx-auto' : 'mr-2'
+      )}
+    />
+    {!collapsed && <span>{title}</span>}
+  </Button>
+);
+
+const MenuSection = ({
+  title,
+  menuId,
+  items,
+  expandedMenus,
+  toggleMenu,
+  isOpen
+}: MenuSectionProps) => (
+  <div>
+    <Button
+      variant="ghost"
+      className={cn(
+        'w-full justify-between',
+        expandedMenus.includes(menuId) && 'bg-gray-100'
+      )}
+      onClick={() => toggleMenu(menuId)}
+    >
+      <div className="flex items-center">
+        <Box className="h-4 w-4 mr-2" />
+        {isOpen && <span>{title}</span>}
+      </div>
+      {isOpen && (
+        <ChevronDown
+          className={cn(
+            'h-4 w-4 transition-transform',
+            expandedMenus.includes(menuId) && 'rotate-180'
+          )}
+        />
+      )}
+    </Button>
+
+    {expandedMenus.includes(menuId) && isOpen && (
+      <div className="pl-6 space-y-1 mt-1">
+        {items.map((item) => (
+          <NavItem key={item.title} {...item} collapsed={!isOpen} />
+        ))}
+      </div>
+    )}
+  </div>
+);
 
 export function Sidebar({
   className,
@@ -53,7 +125,7 @@ export function Sidebar({
   };
 
   const SidebarContent = (
-    <div className="space-y-4 py-4">
+    <div className="space-y-1">
       <div className="px-3 py-2">
         <div className="flex items-center gap-2 mb-8">
           <Truck className="h-8 w-8 text-green-700" />
@@ -74,160 +146,51 @@ export function Sidebar({
           />
           <NavItem icon={FileText} title="Summary" collapsed={!isOpen} />
 
-          {/* Work Order Section */}
-          <div>
-            <Button
-              variant="ghost"
-              className={cn(
-                'w-full justify-between',
-                expandedMenus.includes('workOrder') && 'bg-gray-100'
-              )}
-              onClick={() => toggleMenu('workOrder')}
-            >
-              <div className="flex items-center">
-                <FileInput className="h-4 w-4 mr-2" />
-                {isOpen && <span>Work Order</span>}
-              </div>
-              {isOpen && (
-                <ChevronDown
-                  className={cn(
-                    'h-4 w-4 transition-transform',
-                    expandedMenus.includes('workOrder') && 'rotate-180'
-                  )}
-                />
-              )}
-            </Button>
+          <MenuSection
+            title="Work Order"
+            menuId="workOrder"
+            items={[
+              { icon: Clock, title: 'Work in Process' },
+              { icon: Tag, title: 'Work Order Estimation' },
+              { icon: FileOutput, title: 'Work Order Cancel' },
+              { icon: Clock, title: 'Work Order Log' },
+              { icon: Tag, title: 'Label Sent' },
+              { icon: ClipboardList, title: 'Follow Up' },
+              { icon: ShoppingCart, title: 'Job Order' },
+              { icon: Package, title: 'Warranty Claim' },
+              { icon: CreditCard, title: 'Credit Note' }
+            ]}
+            expandedMenus={expandedMenus}
+            toggleMenu={toggleMenu}
+            isOpen={isOpen}
+          />
 
-            {expandedMenus.includes('workOrder') && isOpen && (
-              <div className="pl-6 space-y-1 mt-1">
-                <NavItem
-                  icon={Clock}
-                  title="Work in Process"
-                  collapsed={!isOpen}
-                />
-                <NavItem
-                  icon={Tag}
-                  title="Work Order Estimation"
-                  collapsed={!isOpen}
-                />
-                <NavItem
-                  icon={FileOutput}
-                  title="Work Order Cancel"
-                  collapsed={!isOpen}
-                />
-                <NavItem
-                  icon={Clock}
-                  title="Work Order Log"
-                  collapsed={!isOpen}
-                />
-                <NavItem icon={Tag} title="Label Sent" collapsed={!isOpen} />
-                <NavItem
-                  icon={ClipboardList}
-                  title="Follow Up"
-                  collapsed={!isOpen}
-                />
-                <NavItem
-                  icon={ShoppingCart}
-                  title="Job Order"
-                  collapsed={!isOpen}
-                />
-                <NavItem
-                  icon={Package}
-                  title="Warranty Claim"
-                  collapsed={!isOpen}
-                />
-                <NavItem icon={Receipt} title="Invoice" collapsed={!isOpen} />
-                <NavItem
-                  icon={CreditCard}
-                  title="Credit Note"
-                  collapsed={!isOpen}
-                />
-              </div>
-            )}
-          </div>
+          <MenuSection
+            title="Parts"
+            menuId="parts"
+            items={[
+              { icon: Box, title: 'Part Receiving' },
+              { icon: ShoppingCart, title: 'Part Order' },
+              { icon: Package, title: 'Part Sales' },
+              { icon: Box, title: 'Part Sales V2' },
+              { icon: Package, title: 'Part Stock Part' }
+            ]}
+            expandedMenus={expandedMenus}
+            toggleMenu={toggleMenu}
+            isOpen={isOpen}
+          />
 
-          {/* Parts Section */}
-          <div>
-            <Button
-              variant="ghost"
-              className={cn(
-                'w-full justify-between',
-                expandedMenus.includes('parts') && 'bg-gray-100'
-              )}
-              onClick={() => toggleMenu('parts')}
-            >
-              <div className="flex items-center">
-                <Box className="h-4 w-4 mr-2" />
-                {isOpen && <span>Parts</span>}
-              </div>
-              {isOpen && (
-                <ChevronDown
-                  className={cn(
-                    'h-4 w-4 transition-transform',
-                    expandedMenus.includes('parts') && 'rotate-180'
-                  )}
-                />
-              )}
-            </Button>
-
-            {expandedMenus.includes('parts') && isOpen && (
-              <div className="pl-6 space-y-1 mt-1">
-                <NavItem
-                  icon={Box}
-                  title="Part Receiving"
-                  collapsed={!isOpen}
-                />
-                <NavItem
-                  icon={ShoppingCart}
-                  title="Part Order"
-                  collapsed={!isOpen}
-                />
-                <NavItem
-                  icon={Package}
-                  title="Part Sales"
-                  collapsed={!isOpen}
-                />
-                <NavItem icon={Box} title="Part Sales V2" collapsed={!isOpen} />
-                <NavItem
-                  icon={Package}
-                  title="Part Stock Part"
-                  collapsed={!isOpen}
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Services Section */}
-          <div>
-            <Button
-              variant="ghost"
-              className={cn(
-                'w-full justify-between',
-                expandedMenus.includes('services') && 'bg-gray-100'
-              )}
-              onClick={() => toggleMenu('services')}
-            >
-              <div className="flex items-center">
-                <Car className="h-4 w-4 mr-2" />
-                {isOpen && <span>Services</span>}
-              </div>
-              {isOpen && (
-                <ChevronDown
-                  className={cn(
-                    'h-4 w-4 transition-transform',
-                    expandedMenus.includes('services') && 'rotate-180'
-                  )}
-                />
-              )}
-            </Button>
-
-            {expandedMenus.includes('services') && isOpen && (
-              <div className="pl-6 space-y-1 mt-1">
-                <NavItem icon={Car} title="Washing" collapsed={!isOpen} />
-                <NavItem icon={Wallet} title="Stock Card" collapsed={!isOpen} />
-              </div>
-            )}
-          </div>
+          <MenuSection
+            title="Services"
+            menuId="services"
+            items={[
+              { icon: Car, title: 'Washing' },
+              { icon: Wallet, title: 'Stock Card' }
+            ]}
+            expandedMenus={expandedMenus}
+            toggleMenu={toggleMenu}
+            isOpen={isOpen}
+          />
         </div>
       </div>
     </div>
@@ -253,34 +216,5 @@ export function Sidebar({
         </SheetContent>
       </Sheet>
     </>
-  );
-}
-
-interface NavItemProps {
-  icon: React.ElementType;
-  title: string;
-  collapsed?: boolean;
-  active?: boolean;
-}
-
-function NavItem({ icon: Icon, title, collapsed, active }: NavItemProps) {
-  return (
-    <Button
-      variant="ghost"
-      className={cn(
-        'w-full justify-start',
-        active && 'bg-gray-100 text-green-700',
-        collapsed ? 'px-2' : 'px-4'
-      )}
-    >
-      <Icon
-        className={cn(
-          'h-4 w-4',
-          active && 'text-green-700',
-          collapsed ? 'mx-auto' : 'mr-2'
-        )}
-      />
-      {!collapsed && <span>{title}</span>}
-    </Button>
   );
 }
